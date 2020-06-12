@@ -21,7 +21,7 @@ N/A
 ![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## Contribution [![GitHub contributors](https://img.shields.io/github/contributors/cdnjs/cdnjs.svg?style=flat)](https://github.com/nivolving/)
-N/
+N/A
 
 ## Tests
 N/A
