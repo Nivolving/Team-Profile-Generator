@@ -10,6 +10,182 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const employees = [];
+
+const employeeQuestions = [
+    {
+        type : "input",
+        message : "What is the employee's name?",
+        name : "name"
+    },
+    {
+        type : "input",
+        message : "What is the employee's ID?",
+        name : "id"
+    },
+    {
+        type : "input",
+        message : "What is the employee's email?",
+        name : "email"
+    }
+
+];
+
+/* inquirer.prompt( employeeQuestions ).then( (response) => {
+
+            console.log( response );
+
+}); */
+
+function askForEmployeeRole() {
+
+    inquirer
+        .prompt ({ 
+            message : "What is your employee role?",
+            name : "role",
+            type : "list",
+            choices : [
+                "Intern",
+                "Engineer"
+            ]
+        })
+        .then( (response) => {
+
+           if ( response.role === "Intern" ){
+              
+                askForInternInfo();
+
+            }else if ( response.role === "Engineer"){
+
+                askForEngineerInfo();
+
+            }
+
+        });
+
+}
+
+function askForManagerInfo() {
+
+  console.log ( "------------------");
+  console.log( "Manager Information");
+  console.log ( "------------------");
+
+   inquirer.
+        prompt([
+            ...employeeQuestions,
+            {
+                type : "input",
+                message : "What is the employee's phone number?",
+                name : "officeNumber"
+            },
+
+        ]).then( ({name, id, email, officeNumber}) => {
+            employees.push(new Manager ( name, id, email, officeNumber));
+            askForEmployeeRole();
+        });
+
+}
+
+
+function askForInternInfo() {
+
+    console.log ( "------------------");
+    console.log( "Intern Information");
+    console.log ( "------------------");
+
+    inquirer.
+        prompt([
+            ...employeeQuestions,
+            {
+                type : "input",
+                message : "What is the Intern's school name?",
+                name : "school"
+            },
+
+        ]).then( ({name, id, email, school} ) => {
+            employees.push( new Intern(name, id, email, school));
+            askToContinue();
+        });
+
+}
+
+function askForEngineerInfo() {
+
+    console.log ( "------------------");
+    console.log( "Engineer Information");
+    console.log ( "------------------");
+
+    inquirer.
+    prompt([
+        ...employeeQuestions,
+        {
+            type : "input",
+            message : "What is the Engineer's github name?",
+            name : "github"
+        },
+
+    //object destructuring
+
+    ]).then( ({name, id , email, github}) => {
+        employees.push( new Engineer(name, id, email, github));
+        askToContinue()
+    });
+
+    
+
+}
+
+function askToContinue(){
+    inquirer
+        .prompt({
+             
+            message : " Do you want to add another team member?",
+            name : "newMember",
+            type : "list",
+            choices: [
+                "Yes",
+                "No"
+            ]
+        }).then( ({ newMember }) => {
+            
+            if( newMember == "Yes") {
+                askForEmployeeRole();
+            }else{
+                createHTMLFile (employees);
+            }
+        });
+}
+
+function createHTMLFile(){
+
+    const html = render (employees);
+
+    if(! fs.existsSync(OUTPUT_DIR) ){
+        fs.mkdirSync( OUTPUT_DIR );
+    }
+    
+    fs.writeFile(outputPath, html, (err) => {
+         
+        if(err) console.log(err);
+        else console.log ( " HTML File created");
+    })
+
+}
+
+askForManagerInfo();
+
+
+
+
+
+
+
+
+
+
+
+
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
