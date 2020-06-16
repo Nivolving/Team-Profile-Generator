@@ -15,7 +15,7 @@ A software engineering team generator command line application. The application 
 
 
 ## Installation
-N/A
+npm Install
 
 ## License
 ![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)
